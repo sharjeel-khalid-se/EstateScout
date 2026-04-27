@@ -12,14 +12,33 @@ connectDB();
 
 const app = express()
 
+const allowedOrigins = new Set([
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://estate-scout-psi.vercel.app',
+  process.env.FRONTEND_URL,
+].filter(Boolean))
+
 const corsOptions = {
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'https://estate-scout-psi.vercel.app',
-    process.env.FRONTEND_URL,
-  ].filter(Boolean),
+  origin: (origin, callback) => {
+    if (!origin) {
+      return callback(null, true)
+    }
+
+    try {
+      const originHost = new URL(origin).hostname
+      const isVercelPreview = originHost.endsWith('.vercel.app')
+
+      if (allowedOrigins.has(origin) || isVercelPreview) {
+        return callback(null, true)
+      }
+    } catch (error) {
+      // Fall through to the rejection below
+    }
+
+    return callback(new Error(`CORS blocked for origin: ${origin}`))
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
