@@ -96,22 +96,28 @@ export const logout = async (req, res) => {
 // Refesh token controller (token rotation)
 export const refreshToken = async (req, res) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
-    if (!refreshToken) {
+    const token = req.cookies.refreshToken;
+    if (!token) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET, (err, decoded) => {
+    
+    jwt.verify(token, process.env.JWT_REFRESH_TOKEN_SECRET, (err, decoded) => {
       if (err) {
-        return res.status(403).json({ message: "Forbidden" });
+        return res.status(403).json({ message: "Token expired or invalid" });
       }
-      const newAccessToken = generateAccessToken(decoded);
-      res.status(200).json({ token: newAccessToken });
+      try {
+        const newAccessToken = generateAccessToken({ _id: decoded.id });
+        return res.status(200).json({ token: newAccessToken });
+      } catch (error) {
+        console.error("Error generating token:", error);
+        return res.status(500).json({ message: "Server error" });
+      }
     });
   } catch (error) {
     console.error("Error refreshing token:", error);
     res.status(500).json({ message: "Server error" });
   }
-}
+};
 
 // Get user profile by ID
 export const getUserProfile = async (req, res) => {

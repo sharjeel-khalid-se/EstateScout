@@ -15,7 +15,9 @@ const app = express()
 // Middleware
 app.use(cors({
   origin: [
-    'http://localhost:3000', // For local development
+    'http://localhost:3000', // For local development (Create React App)
+    'http://localhost:5173', // For local development (Vite)
+    'http://localhost:5174', // Alternative Vite port
     'https://estate-scout-psi.vercel.app' // Your deployed Vercel frontend (NO trailing slash)
   ],
   credentials: true

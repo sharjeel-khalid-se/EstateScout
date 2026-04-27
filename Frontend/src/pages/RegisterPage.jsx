@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { authAPI } from '../services/api'
-import { User, Mail, Lock, Phone, AlertCircle, Loader } from 'lucide-react'
+import { User, Mail, Lock, Phone, AlertCircle, Loader, Eye, EyeOff } from 'lucide-react'
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -11,6 +11,7 @@ export default function RegisterPage() {
     phone: '',
     role: 'user',
   })
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
@@ -40,35 +41,40 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-gray-50 flex items-center justify-center py-12 px-4">
+    <div className="min-h-[calc(100vh-80px)] bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center py-12 px-4">
       <div className="w-full max-w-md">
-        <div className="card p-8">
-          <h2 className="text-3xl font-bold text-center mb-2">Create Account</h2>
-          <p className="text-gray-600 text-center mb-6">
-            Join EstateScout and start exploring properties
-          </p>
+        <div className="card-elevated p-8 md:p-10">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold mb-2 gradient-text">Create Account</h2>
+            <p className="text-gray-600">
+              Join EstateScout and start exploring properties
+            </p>
+          </div>
 
+          {/* Error Message */}
           {error && (
-            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-2 text-red-700">
-              <AlertCircle size={20} />
-              <span>{error}</span>
+            <div className="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-lg flex items-start space-x-3 text-red-700 animate-fade-in">
+              <AlertCircle size={20} className="flex-shrink-0 mt-0.5" />
+              <span className="text-sm font-semibold">{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
                 Full Name
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-3 text-gray-400" size={20} />
+                <User className="absolute left-4 top-4 text-gray-400" size={20} />
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="input-field pl-10"
+                  className="input-field pl-12"
                   placeholder="John Doe"
                   required
                 />
@@ -77,17 +83,17 @@ export default function RegisterPage() {
 
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 text-gray-400" size={20} />
+                <Mail className="absolute left-4 top-4 text-gray-400" size={20} />
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="input-field pl-10"
+                  className="input-field pl-12"
                   placeholder="you@example.com"
                   required
                 />
@@ -96,17 +102,17 @@ export default function RegisterPage() {
 
             {/* Phone */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
                 Phone Number
               </label>
               <div className="relative">
-                <Phone className="absolute left-3 top-3 text-gray-400" size={20} />
+                <Phone className="absolute left-4 top-4 text-gray-400" size={20} />
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="input-field pl-10"
+                  className="input-field pl-12"
                   placeholder="+1 (555) 123-4567"
                 />
               </div>
@@ -114,26 +120,33 @@ export default function RegisterPage() {
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3 text-gray-400" size={20} />
+                <Lock className="absolute left-4 top-4 text-gray-400" size={20} />
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="input-field pl-10"
+                  className="input-field pl-12 pr-12"
                   placeholder="••••••••"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 transition"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
             </div>
 
             {/* Role */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
                 Account Type
               </label>
               <select
@@ -142,12 +155,48 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 className="input-field"
               >
-                <option value="user">Buyer/Renter</option>
-                <option value="agent">Real Estate Agent</option>
+                <option value="user">👤 Buyer/Renter</option>
+                <option value="agent">🏢 Real Estate Agent</option>
               </select>
             </div>
 
-            {/* Submit */}
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full btn-primary flex items-center justify-center space-x-2 disabled:opacity-50 text-lg font-semibold py-3 mt-6"
+            >
+              {loading && <Loader size={22} className="animate-spin" />}
+              <span>{loading ? 'Creating Account...' : 'Sign Up'}</span>
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="my-6 flex items-center space-x-4">
+            <div className="flex-grow h-px bg-gray-200"></div>
+            <span className="text-sm text-gray-600">or</span>
+            <div className="flex-grow h-px bg-gray-200"></div>
+          </div>
+
+          {/* Login Link */}
+          <div className="text-center">
+            <p className="text-gray-600">
+              Already have an account?{' '}
+              <Link to="/login" className="text-blue-600 font-bold hover:text-blue-700 transition">
+                Sign In
+              </Link>
+            </p>
+          </div>
+        </div>
+
+        {/* Footer Text */}
+        <p className="text-center text-sm text-gray-600 mt-6">
+          By signing up, you agree to our Terms of Service and Privacy Policy
+        </p>
+      </div>
+    </div>
+  )
+}
             <button
               type="submit"
               disabled={loading}
