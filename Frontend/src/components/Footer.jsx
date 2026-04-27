@@ -125,25 +125,4 @@ export default function Footer() {
     </footer>
   )
 }
-                <Facebook size={24} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition">
-                <Twitter size={24} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition">
-                <Instagram size={24} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition">
-                <Linkedin size={24} />
-              </a>
-            </div>
-          </div>
-        </div>
 
-        <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
-          <p>&copy; 2026 EstateScout. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
-  )
-}
