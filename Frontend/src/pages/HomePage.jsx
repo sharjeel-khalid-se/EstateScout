@@ -37,7 +37,7 @@ export default function HomePage() {
                 </Link>
                 <Link 
                   to="/register" 
-                  className="btn-outline border-white text-white hover:bg-white hover:text-blue-600 flex items-center justify-center space-x-2"
+                  className="btn-outline border-white text-white bg-white  hover:bg-blue-600 hover:text-white flex items-center justify-center space-x-2"
                 >
                   <Home size={20} />
                   <span>List Your Property</span>

@@ -68,7 +68,6 @@ export default function RegisterPage() {
                 Full Name
               </label>
               <div className="relative">
-                <User className="absolute left-4 top-4 text-gray-400" size={20} />
                 <input
                   type="text"
                   name="name"
@@ -87,7 +86,6 @@ export default function RegisterPage() {
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-4 text-gray-400" size={20} />
                 <input
                   type="email"
                   name="email"
@@ -106,7 +104,6 @@ export default function RegisterPage() {
                 Phone Number
               </label>
               <div className="relative">
-                <Phone className="absolute left-4 top-4 text-gray-400" size={20} />
                 <input
                   type="tel"
                   name="phone"
@@ -124,7 +121,6 @@ export default function RegisterPage() {
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-4 top-4 text-gray-400" size={20} />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
@@ -197,26 +193,4 @@ export default function RegisterPage() {
     </div>
   )
 }
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full btn-primary flex items-center justify-center space-x-2 disabled:opacity-50 mt-6"
-            >
-              {loading && <Loader size={20} className="animate-spin" />}
-              <span>{loading ? 'Creating Account...' : 'Create Account'}</span>
-            </button>
-          </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
-              Already have an account?{' '}
-              <Link to="/login" className="text-blue-600 font-semibold hover:underline">
-                Sign in
-              </Link>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
