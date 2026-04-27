@@ -12,19 +12,22 @@ connectDB();
 
 const app = express()
 
-// Middleware
-app.use(cors({
+const corsOptions = {
   origin: [
-    'http://localhost:3000', // For local development (Create React App)
-    'http://localhost:5173', // For local development (Vite)
-    'http://localhost:5174', // Alternative Vite port
-    'https://estate-scout-psi.vercel.app', // Your deployed Vercel frontend
-    process.env.FRONTEND_URL // Dynamic frontend URL from environment
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'https://estate-scout-psi.vercel.app',
+    process.env.FRONTEND_URL,
   ].filter(Boolean),
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}
+
+// Middleware
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 
 app.use(express.json());
@@ -47,6 +50,10 @@ app.use('/api/properties', propertyRoutes);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-});
+  });
+}
+
+export default app;
