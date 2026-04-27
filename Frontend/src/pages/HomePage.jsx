@@ -167,10 +167,4 @@ export default function HomePage() {
     </div>
   )
 }
-            Start Exploring Now
-          </Link>
-        </div>
-      </section>
-    </div>
-  )
-}
+            
