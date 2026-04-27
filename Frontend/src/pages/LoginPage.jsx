@@ -56,7 +56,6 @@ export default function LoginPage() {
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-4 text-gray-400" size={20} />
                 <input
                   type="email"
                   value={email}
@@ -73,9 +72,7 @@ export default function LoginPage() {
               <label className="block text-sm font-semibold text-gray-700 mb-3">
                 Password
               </label>
-              <div className="relative">
-                <Lock className="absolute left-4 top-4 text-gray-400" size={20} />
-                <input
+              <div className="relative">                <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
