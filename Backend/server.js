@@ -17,9 +17,14 @@ import { hasCloudinaryConfig } from './utils/cloudinary.js';
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
+  origin: ['http://localhost:3000', 'https://estate-scout-psi.vercel.app'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', "PATCH", 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// Handle preflight requests
+app.options('*', cors());
 
 
 // Serve local uploads only when Cloudinary is NOT configured. On Vercel
