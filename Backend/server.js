@@ -16,7 +16,13 @@ const uploadsPath = path.resolve(process.cwd(), 'uploads')
 import { hasCloudinaryConfig } from './utils/cloudinary.js';
 
 // Middleware
-app.use(cors);
+app.use(cors({
+  origin: '*', // tighten this later
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: false // set true only if you restrict origin
+}));
+app.options('/{*any}', cors());
 
 // Serve local uploads only when Cloudinary is NOT configured. On Vercel
 // we rely on direct uploads to Cloudinary and cannot write to disk.

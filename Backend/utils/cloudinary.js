@@ -5,7 +5,8 @@ import { CloudinaryStorage } from "multer-storage-cloudinary";
 import multer from "multer";
 
 const uploadsDir = path.resolve(process.cwd(), "uploads");
-const hasCloudinaryConfig = Boolean(
+
+export const hasCloudinaryConfig = Boolean(
     process.env.CLOUDINARY_CLOUD_NAME &&
         process.env.CLOUDINARY_API_KEY &&
         process.env.CLOUDINARY_SECRET_KEY,
@@ -17,9 +18,10 @@ if (hasCloudinaryConfig) {
         api_key: process.env.CLOUDINARY_API_KEY,
         api_secret: process.env.CLOUDINARY_SECRET_KEY,
     });
-} else {
-    // Only create a local uploads directory when Cloudinary is NOT configured.
-    // Vercel's serverless environment is read-only, so avoid mkdir there.
+}
+
+// Only create uploads dir locally — Vercel's filesystem is read-only
+if (!process.env.VERCEL && !hasCloudinaryConfig) {
     if (!fs.existsSync(uploadsDir)) {
         fs.mkdirSync(uploadsDir, { recursive: true });
     }
@@ -28,9 +30,11 @@ if (hasCloudinaryConfig) {
 const storage = hasCloudinaryConfig
     ? new CloudinaryStorage({
             cloudinary,
-            folder: "EstateScout",
-            allowedFormats: ["jpg", "png", "jpeg"],
-            transformation: [{ width: 500, height: 500, crop: "limit" }],
+            params: {
+                folder: "EstateScout",
+                allowed_formats: ["jpg", "png", "jpeg"],
+                transformation: [{ width: 500, height: 500, crop: "limit" }],
+            },
         })
     : multer.diskStorage({
             destination: (_req, _file, callback) => {
@@ -45,4 +49,4 @@ const storage = hasCloudinaryConfig
 
 const upload = multer({ storage });
 
-export { cloudinary, upload, hasCloudinaryConfig, uploadsDir };
+export { cloudinary, upload, uploadsDir };
