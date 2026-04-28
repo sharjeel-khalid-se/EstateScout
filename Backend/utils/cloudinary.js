@@ -17,10 +17,12 @@ if (hasCloudinaryConfig) {
         api_key: process.env.CLOUDINARY_API_KEY,
         api_secret: process.env.CLOUDINARY_SECRET_KEY,
     });
-}
-
-if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
+} else {
+    // Only create a local uploads directory when Cloudinary is NOT configured.
+    // Vercel's serverless environment is read-only, so avoid mkdir there.
+    if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir, { recursive: true });
+    }
 }
 
 const storage = hasCloudinaryConfig

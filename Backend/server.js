@@ -13,6 +13,7 @@ connectDB();
 
 const app = express()
 const uploadsPath = path.resolve(process.cwd(), 'uploads')
+import { hasCloudinaryConfig } from './utils/cloudinary.js';
 
 const allowedOrigins = new Set([
   'http://localhost:3000',
@@ -49,7 +50,11 @@ const corsOptions = {
 // Middleware
 app.use(cors(corsOptions));
 
-app.use('/uploads', express.static(uploadsPath));
+// Serve local uploads only when Cloudinary is NOT configured. On Vercel
+// we rely on direct uploads to Cloudinary and cannot write to disk.
+if (!hasCloudinaryConfig) {
+  app.use('/uploads', express.static(uploadsPath));
+}
 
 
 app.use(express.json());
