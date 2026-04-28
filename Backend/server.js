@@ -19,7 +19,6 @@ const allowedOrigins = new Set([
   'http://localhost:5173',
   'http://localhost:5174',
   'https://estate-scout-psi.vercel.app',
-  '*',
   process.env.FRONTEND_URL,
 ].filter(Boolean))
 
