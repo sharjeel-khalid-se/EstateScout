@@ -1,6 +1,24 @@
 import Property from "../models/property.model.js";
 import User from "../models/user.model.js";
 import verifyToken from "../middlewares/auth.middleware.js";
+import path from "path";
+
+const normalizeUploadedFilePath = (req, file) => {
+  if (!file?.path) {
+    return "";
+  }
+
+  if (/^https?:\/\//i.test(file.path)) {
+    return file.path;
+  }
+
+  if (path.isAbsolute(file.path)) {
+    const publicPath = `/${path.relative(process.cwd(), file.path).replace(/\\/g, "/")}`;
+    return `${req.protocol}://${req.get("host")}${publicPath}`;
+  }
+
+  return file.path.startsWith("/") ? file.path : `/${file.path.replace(/\\/g, "/")}`;
+};
 
 export const createProperty = async (req, res) => {
   try {
@@ -20,8 +38,8 @@ export const createProperty = async (req, res) => {
         .json({ message: "thumbnail and images are required" });
     }
 
-    const imagePaths = req.files["images"].map((file) => file.path);
-    const thumbnailPath = req.files["thumbnail"][0].path;
+    const imagePaths = req.files["images"].map((file) => normalizeUploadedFilePath(req, file));
+    const thumbnailPath = normalizeUploadedFilePath(req, req.files["thumbnail"][0]);
 
     const property = await Property.create({
       title,

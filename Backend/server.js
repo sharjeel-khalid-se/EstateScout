@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import path from 'path';
 import connectDB from './config/db.js';
 
 
@@ -11,12 +12,14 @@ dotenv.config();
 connectDB();
 
 const app = express()
+const uploadsPath = path.resolve(process.cwd(), 'uploads')
 
 const allowedOrigins = new Set([
   'http://localhost:3000',
   'http://localhost:5173',
   'http://localhost:5174',
   'https://estate-scout-psi.vercel.app',
+  '*',
   process.env.FRONTEND_URL,
 ].filter(Boolean))
 
@@ -46,7 +49,8 @@ const corsOptions = {
 
 // Middleware
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+
+app.use('/uploads', express.static(uploadsPath));
 
 
 app.use(express.json());
